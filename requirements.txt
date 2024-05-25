@@ -1,0 +1,6 @@
+list of dependencies required to run the project
+
+requests
+lxml
+beautifulsoup4
+python-dotenv
