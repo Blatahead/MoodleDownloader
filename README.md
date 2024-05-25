@@ -12,6 +12,6 @@ Script Python pour automatiser le téléchargement de fichiers depuis Moodle.
 
 3. Créer un fichier .env à la racine du projet avec le contenu suivant:
 
-```MOODLE_URL=https://votre-moodle-url
-```USERNAME=votre_nom_utilisateur
-```PASSWORD=votre_mot_de_passe
+```MOODLE_URL=votre-moodle-url
+USERNAME=votre_nom_utilisateur
+PASSWORD=votre_mot_de_passe
