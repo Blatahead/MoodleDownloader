@@ -1,13 +1,15 @@
+#librairies
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-
 from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+#personnal
 from modules.authentication import authenticate
 from modules.counter import count_elements
 from config.config import MOODLE_EMAIL, MOODLE_PASSWORD
-import time
 
 # Use Chrome
 options = Options()
