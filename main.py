@@ -4,8 +4,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.common.exceptions import TimeoutException
 import time
 
 #personnal
@@ -22,14 +22,15 @@ try:
 	authenticate(driver, MOODLE_EMAIL, MOODLE_PASSWORD)
 
 	# Count number of dashboard card by path
-	dashboardCard = '/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[1]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div'
+	dashboardCard = '/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[2]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div'
 	nbDashboardCard = count_elements(driver, dashboardCard)
+	print(nbDashboardCard)
 	
 	if nbDashboardCard > 0:
 		# browse dashboard cards
 		for i in range(1, nbDashboardCard+1):
 			#click on each dashboard 
-			dashboardCardText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[1]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div[{i}]/div[1]/div/div/a/span[3]')
+			dashboardCardText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[2]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div[{i}]/div[1]/div/div/a/span[3]')
 			dashboardCardText.click()
 			time.sleep(3)
 
@@ -44,7 +45,7 @@ try:
 					#count number of li by path
 					liInTabs = f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li'
 					nbLiInTabs = count_elements(driver, liInTabs)
-					print(nbLiInTabs)
+					print(f"il y a {nbLiInTabs} li a parcourir dans cette section")
 
 					#browse lis
 					if nbLiInTabs > 0:
@@ -56,13 +57,37 @@ try:
 
 							#click on each li content
 							print(f'li {k} :')
-							liText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
-							liText.click()
-							time.sleep(3)
+							
+							try :
+								liText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
+									
+								liText.click()
+        
+								time.sleep(3)
+								# check du cadenas
+								if(driver.current_url.startswith("https://learning.devinci.fr/mod/resource/")):
+									print(f"li {k} est une ressource")
 
-							#back to previous page
-							driver.back()
-							time.sleep(3)
+									#SUITE
+								else:
+									print(f"li {k} n'est pas une ressource")
+									#cas du CM 5 à gérer en algo
+
+								#back to previous page
+								driver.back()
+								time.sleep(3)
+
+							except: 
+								print("le click n'a pas pu se faire, tentative de scroll")
+								drawerContainer = "/html/body/div[3]/div[4]/div[2]"
+								driver.execute_script('drawerContainer.scroll(0,10000)')
+								print('scroll fait')
+    
+								liText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
+									
+								liText.click()
+        
+								time.sleep(3)
 					else:
 						print("Aucun élément dans ce li")
 			else:
@@ -73,6 +98,6 @@ try:
 			time.sleep(3)
 	else:
 		print("Aucun élément trouvé.")
-
+  
 finally:
     driver.quit()
