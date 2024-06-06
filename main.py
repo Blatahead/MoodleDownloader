@@ -4,6 +4,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotInteractableException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 # from selenium.webdriver.support import expected_conditions as EC
 # from selenium.common.exceptions import TimeoutException
 import time
@@ -54,7 +59,6 @@ try:
 							menuButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[5]/div/div[1]/div/button')
 							menuButton.click()
 							time.sleep(2)
-
 							#click on each li content
 							print(f'li {k} :')
 							
@@ -68,7 +72,7 @@ try:
 								if(driver.current_url.startswith("https://learning.devinci.fr/mod/resource/")):
 									print(f"li {k} est une ressource")
 
-									#SUITE
+									#SUITE (créer fonction)
 								else:
 									print(f"li {k} n'est pas une ressource")
 									#cas du CM 5 à gérer en algo
@@ -78,16 +82,44 @@ try:
 								time.sleep(3)
 
 							except: 
-								print("le click n'a pas pu se faire, tentative de scroll")
-								drawerContainer = "/html/body/div[3]/div[4]/div[2]"
-								driver.execute_script('drawerContainer.scroll(0,10000)')
-								print('scroll fait')
-    
-								liText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
-									
-								liText.click()
-        
-								time.sleep(3)
+								print("Le clic n'a pas pu se faire, tentative de scroll")
+
+								try:
+									# Trouver le conteneur qui contient l'élément que vous voulez faire défiler
+									drawerContainer = driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/div[2]')
+
+									# Initialiser les variables pour la boucle de défilement
+									elementFound = False
+									maxScrollAttempts = 10 
+									scrollAttempts = 0
+
+									while not elementFound and scrollAttempts < maxScrollAttempts:
+										try:
+											# Chercher l'élément cible
+											driver.execute_script("arguments[0].scrollTop += 50;", drawerContainer)
+											scrollAttempts += 1
+											time.sleep(1)
+											element = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
+											elementFound = True
+										except:
+											print('Erreur de recherche après scroll')
+
+									# Cliquer sur l'élément
+									element.click()
+									time.sleep(3)
+									if(driver.current_url.startswith("https://learning.devinci.fr/mod/resource/")):
+										print(f"li {k} est une ressource")
+
+										#SUITE (créer fonction)
+									else:
+										print(f"li {k} n'est pas une ressource")
+										#cas du CM 5 à gérer en algo
+
+									driver.back()
+									time.sleep(3)
+
+								except Exception as e:
+									print(f"Une erreur est survenue: {e}")
 					else:
 						print("Aucun élément dans ce li")
 			else:
