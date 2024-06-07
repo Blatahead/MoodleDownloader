@@ -30,12 +30,13 @@ try:
 	dashboardCard = '/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[2]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div'
 	nbDashboardCard = count_elements(driver, dashboardCard)
 	print(nbDashboardCard)
-	
+		
 	if nbDashboardCard > 0:
 		# browse dashboard cards
 		for i in range(1, nbDashboardCard+1):
 			#click on each dashboard 
 			dashboardCardText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[2]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div[{i}]/div[1]/div/div/a/span[3]')
+			print(f'ENTREE DANS LA MATIERE : {dashboardCardText.text}')
 			dashboardCardText.click()
 			time.sleep(3)
 
@@ -44,15 +45,29 @@ try:
 			nbCourseSection = count_elements(driver, courseSection)
 			print(f'Nombre de section : {nbCourseSection}')
 
+			menuButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[5]/div/div[1]/div/button')
+   
+			#ouverture du menu pour trouver le nom des sections
+			menuButton.click()
+			time.sleep(2)
+   
 			# browse course sections
 			if nbCourseSection > 0:
 				for j in range(1, nbCourseSection+1):
-					#count number of li by path
+					#### récupérer le bon nom de la div contenant le ul/li ####
+					titleSubPart = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[1]/div[1]/a[2]')
+					print(f'ENTREE DANS LA SECTION : {titleSubPart.text}')
+     
+					#count number of li by div
 					liInTabs = f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li'
 					nbLiInTabs = count_elements(driver, liInTabs)
 					print(f"il y a {nbLiInTabs} li a parcourir dans cette section")
 
-					#browse lis
+					#fermeture pour revenir à l'état précédant
+					menuCloseButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/div[1]/button')
+					menuCloseButton.click()
+					time.sleep(2)
+					#browse lis ############REBOUGER L'AFFICHAGE DU NOM CAR CRASH POUR LA DEUXIEME SECTION
 					if nbLiInTabs > 0:
 						for k in range(1, nbLiInTabs+1):
 							#open side menu
@@ -60,7 +75,7 @@ try:
 							menuButton.click()
 							time.sleep(2)
 							#click on each li content
-							print(f'li {k} :')
+							# print(f'li {k} :')
 							
 							try :
 								liText = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
