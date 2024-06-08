@@ -1,3 +1,5 @@
+This project isn't finished yet, but it has enabled me to quickly discover scraping in Python. I decided to switch to JS (Vue.js) to create an extension that does the same thing.
+
 # MoodleDownloader
 The aim of this project is to simplify the uploading of files to the Moodle platform. With this tool you will be able to select the subjects you want to upload. Everything will be located on your computer in a folder with your name in Downloads.
 

@@ -30,7 +30,7 @@ try:
 	dashboardCard = '/html/body/div[3]/div[5]/div/div[2]/div/section/div/aside/section[2]/div/div/div[1]/div[2]/div/div/div[1]/div/div/div'
 	nbDashboardCard = count_elements(driver, dashboardCard)
 	print(nbDashboardCard)
-		
+	
 	if nbDashboardCard > 0:
 		# browse dashboard cards
 		for i in range(1, nbDashboardCard+1):
@@ -48,15 +48,15 @@ try:
 			menuButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[5]/div/div[1]/div/button')
    
 			#ouverture du menu pour trouver le nom des sections
-			menuButton.click()
-			time.sleep(2)
+			# menuButton.click()
+			# time.sleep(2)
    
 			# browse course sections
 			if nbCourseSection > 0:
 				for j in range(1, nbCourseSection+1):
 					#### récupérer le bon nom de la div contenant le ul/li ####
-					titleSubPart = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[1]/div[1]/a[2]')
-					print(f'ENTREE DANS LA SECTION : {titleSubPart.text}')
+					# titleSubPart = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[1]/div[1]/a[2]')
+					# print(f'ENTREE DANS LA SECTION : {titleSubPart.text}')
      
 					#count number of li by div
 					liInTabs = f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li'
@@ -64,9 +64,9 @@ try:
 					print(f"il y a {nbLiInTabs} li a parcourir dans cette section")
 
 					#fermeture pour revenir à l'état précédant
-					menuCloseButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/div[1]/button')
-					menuCloseButton.click()
-					time.sleep(2)
+					# menuCloseButton = driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/div[1]/button')
+					# menuCloseButton.click()
+					# time.sleep(2)
 					#browse lis ############REBOUGER L'AFFICHAGE DU NOM CAR CRASH POUR LA DEUXIEME SECTION
 					if nbLiInTabs > 0:
 						for k in range(1, nbLiInTabs+1):
@@ -102,6 +102,7 @@ try:
 								try:
 									# Trouver le conteneur qui contient l'élément que vous voulez faire défiler
 									drawerContainer = driver.find_element(By.XPATH, '/html/body/div[3]/div[4]/div[2]')
+									print('ele found')
 
 									# Initialiser les variables pour la boucle de défilement
 									elementFound = False
@@ -117,6 +118,7 @@ try:
 											element = driver.find_element(By.XPATH, f'/html/body/div[3]/div[4]/div[2]/nav/div/div/div[{j}]/div[2]/ul/li[{k}]/a')
 											elementFound = True
 										except:
+											#ovrir la liste
 											print('Erreur de recherche après scroll')
 
 									# Cliquer sur l'élément
